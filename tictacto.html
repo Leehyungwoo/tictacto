@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko">
+ <head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+ <style>
+ *{margin:0; padding:0;}
+ li{list-style:none;}
+ ul{width:306px; margin:100px auto;}
+ ul:after{display:block; content:''; clear:both;}
+ li{float:left; border:1px solid black}
+ li a{display:block; width:100px; height:100px;}
+ </style>
+ 
+ </head>
+ <body>
+<!-- 방법2. -->
+<!-- x값이 같을때 y값이 순차적인것.-->
+<!-- Y값이 같을때 x값이 순차적인것.-->
+<!-- x값 y값이 일정한규칙으로 같이늘거나 주는것 -->
+
+
+<button>새게임하기</button>
+<ul>
+	<li><a href="#">0</a></li>
+	<li><a href="#">1</a></li>
+	<li><a href="#">2</a></li>
+	<li><a href="#">3</a></li>
+	<li><a href="#">4</a></li>
+	<li><a href="#">5</a></li>
+	<li><a href="#">6</a></li>
+	<li><a href="#">7</a></li>
+	<li><a href="#">8</a></li>
+</ul>
+
+<script>
+$(document).ready(function(){
+	var init = null;
+	var play1= null;
+	var play2= null; 
+
+	var $li = $('ul li');
+	var result = [
+	[0,1,2],[3,4,5],[6,7,8],
+	[0,3,6],[1,4,7],[2,5,8],
+	[0,4,8],[2,4,6]
+	];  
+	
+	var flag =[];
+
+
+
+
+	function initFunc(){
+		play1=[];
+		play2=[];
+		init=0;
+		flag=[true,true,true,true,true,true,true,true,true];
+		$li.css('background','#fff');
+	}
+
+	function check(value,player){
+		console.log('value 갯수'+value.length)
+		if(value.length>=3){
+					value.sort(function(a,b){
+						return a-b;
+					}) 
+					for(var j = 0; j<result.length; j++){
+						var plaString = value.toString().replace(/,/gi,''); 
+						var win =[]
+						for(var i = 0; i < 3 ; i++){
+							if(plaString.includes(result[j][i])){
+								win.push(result[j][i])
+							}
+						}
+						if(win.length == 3){
+							return (function(){
+								alert(player+'승리');
+								$li.off('click')
+							})();
+						}else{
+							if(value.length >4){
+								console.log(value.length)
+								return alert('비김');
+							}
+						} 
+					}  
+		} 
+	}
+
+
+	function event(){
+	$li.on('click',function(){
+		var ind = $(this).index()
+		if(flag[ind]){
+			init++;
+				
+				if(init%2){
+					flag[ind]=false;
+					$(this).css('background','red')
+					play1.push(ind);
+					play1.sort(function(a,b){return a-b})
+					check(play1,'player1')
+
+				}else{
+					flag[ind]=false;
+					$(this).css('background','blue')
+					play2.push(ind)
+					play2.sort(function(a,b){return a-b})
+					check(play2,'player2')
+				}
+		}
+	})
+	}
+
+	
+	initFunc();
+	event();
+
+	$('button').on('click',function(){
+		initFunc();
+		event();
+		  
+	})
+
+
+})
+</script>
+
+
+
+
+ </body>
+</html>
